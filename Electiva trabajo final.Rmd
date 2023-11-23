@@ -1,0 +1,1206 @@
+---
+title: "Machine learning"
+author: "Luis Castaño Roa,Santiago Rodriguez Ramirez,Dana Gabriela Salazar"
+date: "2023-11-21"
+output: word_document
+---
+## INTRODUCCIÓN
+
+
+El aprendizaje supervisado emerge como un pilar esencial en el vasto terreno de la ciencia de datos y la ingeniería de aprendizaje automático. Este método revolucionario implica la capacitación de un modelo a través de un conjunto de datos meticulosamente etiquetado, donde cada entrada en el conjunto viene acompañada de una etiqueta o respuesta correspondiente. El propósito subyacente es claro: permitir al modelo discernir la relación intrínseca entre las entradas y las etiquetas, facultando así para realizar predicciones acertadas en datos previamente no explorados.
+
+En términos más asequibles, el aprendizaje supervisado se asemeja al proceso de educar a un modelo mediante ejemplos tangibles. Tomemos el ejemplo de enseñar a un modelo a reconocer imágenes de perros: le proporcionamos una extensa colección de imágenes debidamente etiquetadas como "perro". Este enfoque permite que el modelo identifique patrones y características específicas en estas imágenes. Una vez que ha sido debidamente entrenado, el modelo se vuelve capaz de predecir con precisión si una nueva imagen contiene, o no, un perro.
+
+La trascendencia del aprendizaje supervisado en los ámbitos de la ciencia de datos y el aprendizaje automático no puede ser subestimada. Este enfoque multifacético allana el camino para abordar una amplia gama de tareas, entre las que se incluyen la clasificación, regresión y detección de anomalías. Ejemplos prácticos de su aplicación abarcan desde el reconocimiento de voz hasta la clasificación de correos electrónicos como spam o no spam, y la predicción de precios de acciones, revelando así su versatilidad y relevancia en diversas aplicaciones del mundo real.
+
+El aprendizaje supervisado, con su capacidad para capacitar modelos y realizar predicciones precisas basadas en ejemplos previamente etiquetados, se consolida como una herramienta esencial y poderosa en la caja de herramientas de la ciencia de datos y el aprendizaje automático. Su influencia sigue resonando en la resolución de problemas complejos y la extracción de patrones valiosos a partir de conjuntos de datos diversos.
+
+## MARCO TEÓRICO
+
+
+Estos conceptos básicos son fundamentales para comprender y aplicar con éxito el aprendizaje supervisado en problemas del mundo real. La elección del algoritmo, la evaluación adecuada del modelo y la comprensión de fenómenos como el sobreajuste y el sobreajuste son cruciales para desarrollar modelos eficaces y generalizables.
+
+## Tipos de Problemas:
+
+Regresión: El objetivo principal es comprender y cuantificar cómo las variables independientes afectan a la variable dependiente. Por ejemplo, predecir el precio de una casa basándose en sus características.
+
+Clasificación: Se utiliza cuando la variable objetivo es categórica, es decir, se clasifica en categorías. Ejemplos incluyen la clasificación de correos electrónicos como spam o no spam, o la identificación de imágenes como gatos o perros.
+
+## Algoritmos de Aprendizaje:  
+
+Los algoritmos de aprendizaje son conjuntos de reglas y procedimientos que permiten a un modelo de aprendizaje automático aprender patrones y realizar tareas específicas sin intervención. A continuación, se presentan algunos de los algoritmos de aprendizaje más comunes.
+
+Para regresión: Algoritmos como regresión lineal, regresión polinómica, y máquinas de soporte vectorial (SVM).
+
+Para clasificación: Algoritmos como regresión logística, árboles de decisión, bosques aleatorios, máquinas de soporte vectorial, y redes neuronales, entre otros.
+
+## Entrenamiento y Prueba de Modelos:
+
+Se divide el conjunto de datos en dos partes: conjunto de entrenamiento y conjunto de prueba. El modelo se entrena utilizando el conjunto de entrenamiento.
+Se evalúa la eficacia del modelo utilizando el conjunto de pruebas para verificar su capacidad para generalizar datos no vistos.
+
+Sobreajuste (Overfitting) y Subajuste (Underfitting):
+
+Sobreajuste: Ocurre cuando un modelo se ajusta demasiado bien al conjunto de entrenamiento pero tiene un rendimiento deficiente en datos no vistos. Puede ser causado por la complejidad excesiva del modelo.
+
+Subajuste: Ocurre cuando un modelo es demasiado simple y no captura bien los patrones en los datos de entrenamiento. Esto también resulta en un rendimiento deficiente en datos nuevos.
+
+
+## Validación Cruzada:
+
+Técnica utilizada para evaluar el rendimiento de un modelo y reducir la dependencia de la partición de datos en conjuntos de entrenamiento y prueba. La validación cruzada implica dividir los datos en k pliegues, entrenar el modelo k veces, cada vez utilizando k-1 pliegues como conjunto de entrenamiento y 1 pliegue como conjunto de prueba.
+
+## Métricas de Rendimiento:
+
+Para Regresión: Métricas comunes incluyen el error cuadrático medio (MSE) y el coeficiente de determinación (R²).
+
+Para Clasificación: Métricas comunes incluyen la precisión, la sensibilidad, la especificidad, la F1-score y la curva ROC-AUC.
+
+## METODOLOGÍA
+
+
+Este código realiza un análisis de datos de cáncer de mama, selecciona genes relevantes utilizando una red de interacción de proteínas, divide los datos en conjuntos de entrenamiento y prueba, ajusta un modelo de árbol de decisiones y evalúa su rendimiento utilizando diversas métricas, incluyendo la curva ROC y el AUC. La elección de algoritmos y pasos de preprocesamiento se basa en objetivos específicos del análisis de datos biológicos y en las necesidades del modelo.
+
+## Pasos de la Metodología:
+
+Se utilizaron los datasets BRCA_normal con (113 filas y 23694 variables), BRCA PT con (1106 filas y 23694 variables) y PPI con (5800 filas y 5 columnas)
+ los cuales representan información genética para el estudio del cáncer de mama.
+
+Importar librerías: Se importan las librerías necesarias, como DynamicCancerDriverKM para acceder a datos específicos de cáncer de mama, dplyr para manipulación de datos, rpart para construir un modelo de árbol de decisiones, caret para funciones de entrenamiento y prueba, y pROC para calcular la curva ROC y el área bajo la curva (AUC).
+
+Cargar datos: Se carga el conjunto de datos fusionando datos de cáncer de mama normal (BRCA_normal) y datos de cáncer de mama primario (BRCA_PT) usando la función rbind(). Se eliminan columnas irrelevantes para el análisis. Se verifica si el dataframe contiene datos nulos.
+
+Calcular el porcentaje de expresión y filtrar datos: Se calcula el porcentaje de expresión para cada gen y se filtran los datos para incluir sólo los genes con un porcentaje de expresión mayor o igual al 20%. Se utiliza la red de interacción de proteínas (PPI) para calcular los grados de conexión de los genes y se seleccionan los 100 genes con los grados de conexión más altos. Se realiza la búsqueda de los identificadores de genes utilizando la función changeGeneId para cambiar estos identificadores a un nuevo formato. luego se combinan los nuevos identificadores con las columnas originales de top_100_genes.
+
+Se eliminan las columnas irrelevantes para la búsqueda de los genes en el dataset combinado (merged_data). Se realiza la transposición de filas a columnas del dataframe top_100_genes para poder realizar el filtro de los 100 genes seleccionados en la red PPI para el modelo. Obtener la variable de respuesta 'y' (tipos de muestra), se filtran las columnas del conjunto de datos original para incluir sólo los genes seleccionados, se convierte el objeto 'y' a un factor (es necesario para representar la variable categórica "sample_type" en un número entero para el procesamiento del modelo).
+
+-Dividir los datos en conjuntos de entrenamiento (70%) y prueba (30%).
+-Ajustar un modelo de árbol de decisiones utilizando el conjunto de entrenamiento.
+-Realizar predicciones en el conjunto de pruebas.
+-Evaluar el rendimiento del modelo utilizando una matriz de confusión.
+-Calcular métricas adicionales, como precisión, recall, especificidad, la curva ROC y el área bajo la curva (AUC).
+-Imprimir las métricas de rendimiento del modelo.
+
+## IMPLEMENTACIÓN
+
+
+El código proporcionado implementa un modelo de aprendizaje supervisado, específicamente un modelo de árbol de decisiones, para predecir el tipo de muestra (si es un tumor primario o tejido normal) en un conjunto de datos relacionado con el cáncer de mama. A continuación se explica paso a paso cómo se implementaron los modelos y algunos aspectos clave pero el desarrollo de dicha actividad.
+
+Carga de librerías y datos: Se importan las librerías necesarias, incluyendo DynamicCancerDriverKM, dplyr para manipulación de datos, rpart para árboles de decisiones, caret para funciones de entrenamiento y prueba, y pROC para métricas de rendimiento.
+
+Preprocesamiento de datos:
+Selección y Filtrado de Datos:  Para seleccionar y filtrar datos relevantes, como top_n() para seleccionar los genes con los grados más altos en la red PPI.
+Se utiliza una red de interacción de proteínas (PPI) para calcular los grados de conexión de los genes. Se seleccionan los 100 genes con los grados más altos.
+
+División de datos:
+Se divide el conjunto de datos en conjuntos de entrenamiento (70%) y prueba (30%) utilizando la función createDataPartition.
+
+## Entrenamiento del modelo de árbol de decisiones:
+
+Se ajusta un modelo de árbol de decisiones utilizando la función rpart. El modelo se ajusta a la variable de respuesta y_train en función de las características en X_train.
+Predicciones y Evaluación del Modelo:
+
+Se realizan predicciones en el conjunto de prueba (X_test) utilizando el modelo entrenado.
+Se evalúa el rendimiento del modelo utilizando una matriz de confusión y se calculan métricas como precisión, recall, especificidad, y la curva ROC con el área bajo la curva (AUC).
+
+Desafíos potenciales y consideraciones: La selección de genes basada en la red PPI fue uno de los pasos más desafiantes, ya que en el dataframe merged_data el nombre de las variables y la distribución eran diferentes. Algoritmos de Aprendizaje Automático.
+
+SVM (Support Vector Machine, en español Máquina de Soporte Vectorial) es un algoritmo de aprendizaje supervisado utilizado para clasificación y regresión. Su objetivo principal es encontrar un hiperplano en un espacio multidimensional que separe de manera óptima las diferentes clases presentes en los datos de entrada. En términos más sencillos, un SVM busca la mejor manera de dividir un conjunto de datos en categorías.
+
+## Conceptos clave asociados con SVM:
+
+Hiperplano: En un espacio n-dimensional, un hiperplano es un subespacio de dimensión (n-1). En el caso de SVM en problemas de clasificación binaria, el hiperplano es la frontera de decisión que maximiza la distancia entre las clases.
+
+Vectores de Soporte: Son los puntos de datos más cercanos al hiperplano y tienen un papel crucial en la definición del mismo. Estos vectores de soporte son esenciales para determinar la ubicación y orientación óptimas del hiperplano.
+Margen: El margen es la distancia perpendicular desde el hiperplano a los vectores de soporte más cercanos. SVM busca maximizar este margen para mejorar la generalización del modelo.
+
+Kernel Trick: En casos donde los datos no son linealmente separables, el kernel trick es utilizado para mapear los datos a un espacio de mayor dimensión donde la separación lineal es posible. Los kernels comunes incluyen el kernel lineal, el kernel polinómico y el kernel radial (o Gaussiano).
+
+## Regresión Logística:
+
+La regresión logística es un algoritmo de aprendizaje supervisado utilizado para problemas de clasificación binaria, donde el objetivo es predecir si una observación pertenece a una de dos categorías. Aunque el nombre incluye la palabra "regresión", la regresión logística se utiliza para la clasificación.
+
+El modelo de regresión logística utiliza la función logística (también conocida como función sigmoide) para transformar una combinación lineal de las características de entrada en un valor entre 0 y 1. Matemáticament.
+
+
+## Arboles de Decisión:
+
+Los árboles de decisión son modelos de aprendizaje supervisado que se utilizan tanto para problemas de clasificación como de regresión. Estos modelos representan decisiones en forma de estructura de árbol. Cada nodo interno del árbol representa una decisión basada en una característica, y cada hoja representa la etiqueta de clasificación (o el valor en problemas de regresión).
+
+Durante la construcción del árbol, el algoritmo elige la característica que mejor divide los datos en términos de la variable objetivo. Este proceso se repite recursivamente hasta que se alcanza un criterio de parada, como una profundidad máxima o un número mínimo de puntos en una hoja. Los árboles de decisión son interpretables y pueden visualizarse fácilmente. Sin embargo, pueden ser propensos al sobreajuste, especialmente si se construyen muy profundos sin restricciones.
+
+KNN (k-Nearest Neighbors o k-Vecinos Más Cercanos) es un algoritmo de aprendizaje supervisado utilizado para problemas de clasificación y regresión. Es un tipo de algoritmo basado en instancias, lo que significa que no construye un modelo explícito, sino que memoriza las instancias de entrenamiento para hacer predicciones sobre nuevas instancias.
+
+## Funcionamiento de KNN:
+
+Almacenamiento de Datos de Entrenamiento: El algoritmo almacena todos los ejemplos de entrenamiento en memoria.
+
+Selección del Valor de k: Se elige un valor para k, que representa el número de vecinos más cercanos que se tomarán en cuenta al realizar una predicción.
+
+Cálculo de Distancias: Para predecir la clase de una nueva instancia (en clasificación) o estimar su valor (en regresión), se calcula la distancia entre la nueva instancia y todas las instancias de entrenamiento. La distancia comúnmente utilizada es la distancia euclidiana, pero también se pueden utilizar otras métricas de distancia.
+
+Selección de Vecinos más Cercanos: Se seleccionan los k ejemplos de entrenamiento más cercanos a la nueva instancia en función de la distancia calculada.
+
+Clasificación o Regresión: En clasificación, la clase más frecuente entre los vecinos más cercanos se asigna a la nueva instancia. En regresión, se puede tomar el promedio de los valores de los vecinos más cercanos.
+
+Características de KNN: No Paramétrico: KNN es un algoritmo no paramétrico, lo que significa que no hace suposiciones específicas sobre la forma de la función que está tratando de aprender.
+
+Sensibilidad a la elección de k: La elección del valor de k puede afectar significativamente el rendimiento del algoritmo. Un k muy pequeño puede hacer que el modelo sea sensible al ruido, mientras que un k muy grande puede suavizar demasiado las decisiones.
+
+Computacionalmente Costoso: KNN puede ser computacionalmente costoso, especialmente en conjuntos de datos grandes, ya que requiere calcular distancias entre la nueva instancia y todas las instancias de entrenamiento.
+
+No Modela Relaciones Complejas: KNN puede no funcionar bien en conjuntos de datos con relaciones complejas o no lineales, ya que no modela explícitamente estas relaciones.
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Cargar las bibliotecas necesarias para los distintos modelos que se están ejecutando en este entregable final
+
+
+
+```{r cars}
+library(DynamicCancerDriverKM) 
+library(rpart)  
+library(caret) 
+library(dplyr) 
+library(pROC) 
+library(tidyverse) 
+library(class)  
+library(ROCR)
+library(glmnet) 
+library(e1071) 
+```
+
+## Modelo arbol de decisiones
+
+## Cargar los datos 
+
+```{r}
+merged_data <- rbind(DynamicCancerDriverKM::BRCA_normal, DynamicCancerDriverKM::BRCA_PT)
+```
+
+## Eliminar las columnas no relevantes
+
+```{r}
+columnas_no_relevantes <- c("barcode", "bcr_patient_barcode", "bcr_sample_barcode", "vital_status", "days_to_death", "treatments_radiation_treatment_or_therapy")
+merged_data <- merged_data[, !(names(merged_data) %in% columnas_no_relevantes)]
+```
+
+
+## Verificar si hay datos nulos en el dataset
+
+```{r}
+any(is.na(merged_data))
+```
+
+
+## Calcular el porcentaje de expresión para cada gen
+
+```{r}
+expression_percentage <- colMeans(merged_data > 0)
+umbral <- 0.2
+filtered_data <- merged_data %>%
+  select(names(expression_percentage[expression_percentage >= umbral]))
+```
+
+## Calcular los grados de conexión de los genes en la red PPI
+
+```{r}
+top_genes <- DynamicCancerDriverKM::PPI %>%
+  select(`Input-node Gene Symbol`, `Input-node GeneID`, `Output-node Gene Symbol`, `Edge direction score`) %>%
+  group_by(`Input-node Gene Symbol`) %>%
+  summarize(Degree = sum(`Edge direction score`, na.rm = TRUE)) %>%
+  arrange(desc(Degree))
+```
+
+
+## Seleccionar los 100 genes con los grados de conexión más altos
+
+```{r}
+top_100_genes <- top_genes %>%
+  top_n(100, wt = Degree)
+```
+
+## Buscar la codificación de los genes como HGNC.symbol de top_100_genes
+
+```{r}
+top_genes <- cbind(AMCBGeneUtils::changeGeneId(top_100_genes[, 1], from = "HGNC.symbol")[2:4], top_100_genes[, -1])
+```
+
+## Eliminar las columnas no relevantes de top_100_genes
+
+```{r}
+columnas_relevantes <- c("HGNC.ID", "HGNC.symbol")
+top_genes <- top_genes[, !(names(top_genes) %in% columnas_relevantes)]
+```
+
+## Transponer top_genes para que los nombres de los genes estén en columnas
+
+```{r}
+transposed_genes <- t(top_genes[, -1])
+colnames(transposed_genes) <- top_genes$Ensembl.ID
+
+```
+
+## Obtener la variable de respuesta 'y'
+
+```{r}
+y <- filtered_data$sample_type
+```
+
+## Filtrar las columnas de 'filtered_data' para mantener solo los genes seleccionados
+
+```{r}
+X <- filtered_data[, transposed_genes]
+```
+
+## Convertir la variable de respuesta a factor
+
+```{r}
+y <- as.factor(y)
+```
+
+## Definir la validación cruzada (k-fold cross-validation)
+
+```{r}
+control <- trainControl(method = "cv", number = 5)
+```
+
+## Ajustar el modelo de árbol de decisiones con validación cruzada
+
+```{r}
+model <- train(y ~ ., data = data.frame(X, y), method = "rpart", trControl = control)
+```
+
+## Realizar predicciones
+
+```{r}
+predictions <- predict(model, newdata = data.frame(X), type = "raw")  
+```
+
+## Convertir a factor
+
+```{r}
+predictions <- as.factor(predictions)
+```
+
+## Evaluar el rendimiento del modelo
+
+```{r}
+confusionMatrix(predictions, y)
+```
+
+## Calcular la curva ROC y el área bajo la curva (AUC)
+
+```{r}
+precision <- posPredValue(predictions, y)
+roc_curve <- roc(y, as.numeric(predictions == "Tumor"), levels = c("Primary Tumor", "Solid Tissue Normal"))
+```
+
+```{r}
+roc_auc <- auc(roc_curve)
+cat("Precision:", precision, "AUC:", roc_auc)
+```
+
+## Modelo arbol de decisiones_PIK3R1
+
+# Cargar datos
+
+```{r}
+merged_data <- rbind(DynamicCancerDriverKM::BRCA_normal, DynamicCancerDriverKM::BRCA_PT)
+
+load("C:\\Users\\Santi\\Downloads\\geneScore.rdata")
+```
+
+# Eliminar las columnas no relevantes
+
+```{r}
+columnas_no_relevantes <- c("barcode", "bcr_patient_barcode", "bcr_sample_barcode", "vital_status", "days_to_death", "treatments_radiation_treatment_or_therapy")
+merged_data <- merged_data[, !(names(merged_data) %in% columnas_no_relevantes)]
+```
+
+# Verificar si hay datos nulos en el dataset
+
+```{r}
+any(is.na(merged_data))
+```
+
+# Calcular el porcentaje de expresiC3n para cada gen
+
+```{r}
+expression_percentage <- colMeans(merged_data > 0)
+umbral <- 0.2
+filtered_data <- merged_data %>%
+  select(names(expression_percentage[expression_percentage >= umbral]))
+```
+
+# Ordenar el data frame por el campo 'score' de manera descendente
+```{r}
+df_sorted <-  prub %>% arrange(desc(score))
+```
+
+# Seleccionar los primeros 100 genes con mayor score
+```{r}
+top_genes <- df_sorted[1:100, ]
+```
+
+# Transponer top_genes para que los nombres de los genes estC)n en columnas
+```{r}
+transposed_genes <- as.data.frame(t(top_genes))
+```
+
+# Asignar los nombres de las columnas usando la primera fila (antes de la transposiciC3n)
+```{r}
+colnames(transposed_genes) <-  transposed_genes[1, ]
+```
+
+# Eliminar la primera fila, ya que ahora es la cabecera de las columnas
+```{r}
+transposed_genes <- transposed_genes[-1, ]
+```
+
+# Obtener la variable de respuesta 'y'
+```{r}
+y <- filtered_data$sample_type
+```
+
+# Filtrar las columnas de 'filtered_data' para mantener solo los genes seleccionados
+```{r}
+X <- filtered_data[, colnames(transposed_genes)]
+```
+
+# Convertir la variable de respuesta a factor
+```{r}
+y <- as.factor(y)
+```
+
+# Definir la validaciC3n cruzada (k-fold cross-validation)
+```{r}
+control <- trainControl(method = "cv", number = 5) 
+```
+
+# Ajustar el modelo de C!rbol de decisiones con validaciC3n cruzada
+```{r}
+model <- train(y ~ ., data = data.frame(X, y), method = "rpart", trControl = control)
+```
+
+# Realizar predicciones
+```{r}
+predictions <- predict(model, newdata = data.frame(X), type = "raw")  
+```
+
+# Convertir a factor
+```{r}
+predictions <- as.factor(predictions)
+```
+
+# Evaluar el rendimiento del modelo
+```{r}
+confusionMatrix(predictions, y)
+```
+
+# Calcular la curva ROC y el area bajo la curva (AUC)
+```{r}
+precision <- posPredValue(predictions, y)
+roc_curve <- roc(y, as.numeric(predictions == "Tumor"), levels = c("Primary Tumor", "Solid Tissue Normal"))
+```
+
+```{r}
+roc_auc <- auc(roc_curve)
+cat("Precision:", precision, "AUC:", roc_auc)
+```
+
+
+## Resultados y comparacion entre modelos de arbol de decisiones y arbol de decisiones_PIK3R1
+
+El modelo de arbol de decision muestra un rendimiento solido con precision general del 96.88%. Por otra parte se tiene que este modelo tiene una sensibilidad alta del 98.10% lo que nos indica que el modelo es capaz de identificar en gran medida las instancias de primary tumor. Kappa es de 0.8176 indica un acuerdo sustancial entre las predicciones y las clases reales.
+
+El modelo de arbol de decisiones_PIK3R1 tiene un rendimiento un superior al anterior modelo, este con un 97.7% la sensibilidad del modelo se encuentra en el rango de 99.46%. Por ultimo el Kappa es de 0.8542
+
+
+El modelo con genes PIK3R1 tiende a aumentar el rendimiento ligeramente mejor en términos de precisión y sensibilidad en comparación con el otro modelo de arbol de decisiones. 
+
+## Modelo KNN 
+
+# Cargar los datos (BRCA_normal y BRCA_PT) y unirlos en un solo dataframe
+
+```{r}
+merged_data <- rbind(DynamicCancerDriverKM::BRCA_normal, DynamicCancerDriverKM::BRCA_PT)
+```
+
+# Eliminar las columnas no relevantes para el análisis
+
+```{r}
+columnas_no_relevantes <- c("barcode", "bcr_patient_barcode", "bcr_sample_barcode", "vital_status", "days_to_death", "treatments_radiation_treatment_or_therapy")
+merged_data <- merged_data[, !(names(merged_data) %in% columnas_no_relevantes)]
+```
+
+# Verificar si hay datos nulos en el dataset
+
+```{r}
+any(is.na(merged_data))
+```
+
+# Calcular el porcentaje de expresión para cada gen
+
+```{r}
+expression_percentage <- colMeans(merged_data > 0)
+umbral <- 0.2
+filtered_data <- merged_data %>%
+  select(names(expression_percentage[expression_percentage >= umbral]))
+```
+
+# Calcular grados de conexión de los genes en la red PPI
+
+```{r}
+top_genes <- DynamicCancerDriverKM::PPI %>%
+  select(`Input-node Gene Symbol`, `Input-node GeneID`, `Output-node Gene Symbol`, `Edge direction score`) %>%
+  group_by(`Input-node Gene Symbol`) %>%
+  summarize(Degree = sum(`Edge direction score`, na.rm = TRUE)) %>%
+  arrange(desc(Degree))
+```
+
+# Seleccionar los 100 genes con los grados de conexión más altos
+
+```{r}
+top_100_genes <- top_genes %>%
+  top_n(100, wt = Degree)
+
+top_genes <- cbind(AMCBGeneUtils::changeGeneId(top_100_genes[, 1], from = "HGNC.symbol")[2:4], top_100_genes[, -1])
+```
+
+# Eliminar las columnas no relevantes
+
+```{r}
+columnas_relevantes <- c("HGNC.ID", "HGNC.symbol")
+top_genes <- top_genes[, !(names(top_genes) %in% columnas_relevantes)]
+```
+
+# Transponer top_genes para que los nombres de los genes estén en columnas
+
+```{r}
+transposed_genes <- t(top_genes[, -1])
+colnames(transposed_genes) <- top_genes$Ensembl.ID
+```
+
+# Obtener la variable de respuesta 'y'
+
+```{r}
+y <- filtered_data$sample_type
+```
+
+# Filtrar las columnas de tu dataframe 'data' para mantener solo los genes seleccionados
+
+```{r}
+X <- filtered_data[, transposed_genes]
+```
+
+# Convertir la variable de respuesta a factor
+
+```{r}
+y <- as.factor(y)
+```
+
+# Normalizar datos
+
+```{r}
+X <- scale(X)
+```
+
+# Dividir los datos en conjuntos de entrenamiento y prueba con validación cruzada
+
+```{r}
+set.seed(123)
+indices <- createDataPartition(y, p = 0.7, list = FALSE)
+train_indices <- indices
+X_train <- X[train_indices, ]
+y_train <- y[train_indices]
+X_test <- X[-train_indices, ]
+y_test <- y[-train_indices]
+```
+
+# Ajustar el modelo KNN con validación cruzada
+
+```{r}
+ctrl <- trainControl(method = "cv", number = 5)  
+k_values <- c(1, 3, 5, 7, 9)
+tune_grid <- expand.grid(k = k_values)
+model <- train(X_train, y_train, method = "knn", tuneGrid = tune_grid, trControl = ctrl)
+```
+
+# Realizar predicciones en el conjunto de prueba
+
+```{r}
+predictions <- predict(model, newdata = X_test)
+```
+
+# Evaluar el rendimiento del modelo
+
+```{r}
+confusionMatrix(predictions, y_test)
+```
+
+# Curva ROC y AUC
+
+```{r}
+predictions <- as.numeric(predictions)
+prediction_obj <- prediction(predictions, y_test)
+perf <- performance(prediction_obj, "tpr", "fpr")
+plot(perf, main = "ROC Curve", col = "blue", lwd = 2)
+```
+
+
+## Modelo KNN PIK3R1
+
+# Cargar los datos (BRCA_normal y BRCA_PT) y unirlos en un solo dataframe
+```{r}
+merged_data <- rbind(DynamicCancerDriverKM::BRCA_normal, DynamicCancerDriverKM::BRCA_PT)
+
+load("C:\\Users\\Santi\\Downloads\\geneScore.rdata")
+```
+
+# Eliminar las columnas no relevantes para el análisis
+```{r}
+columnas_no_relevantes <- c("barcode", "bcr_patient_barcode", "bcr_sample_barcode", "vital_status", "days_to_death", "treatments_radiation_treatment_or_therapy")
+merged_data <- merged_data[, !(names(merged_data) %in% columnas_no_relevantes)]
+```
+
+# Verificar si hay datos nulos en el dataset
+```{r}
+any(is.na(merged_data))
+```
+
+# Calcular el porcentaje de expresión para cada gen
+```{r}
+expression_percentage <- colMeans(merged_data > 0)
+umbral <- 0.2
+filtered_data <- merged_data %>%
+  select(names(expression_percentage[expression_percentage >= umbral]))
+```
+
+# Ordenar el data frame por el campo 'score' de manera descendente
+```{r}
+df_sorted <-  prub %>% arrange(desc(score))
+```
+
+# Seleccionar los primeros 100 genes con mayor score
+```{r}
+top_genes <- df_sorted[1:100, ]
+```
+
+# Transponer top_genes para que los nombres de los genes estén en columnas
+```{r}
+transposed_genes <- as.data.frame(t(top_genes))
+```
+
+# Asignar los nombres de las columnas usando la primera fila (antes de la transposición)
+```{r}
+colnames(transposed_genes) <-  transposed_genes[1, ]
+```
+
+# Eliminar la primera fila, ya que ahora es la cabecera de las columnas
+```{r}
+transposed_genes <- transposed_genes[-1, ]
+```
+
+# Obtener la variable de respuesta 'y'
+```{r}
+y <- filtered_data$sample_type
+```
+
+# Filtrar las columnas de tu dataframe 'data' para mantener solo los genes seleccionados
+```{r}
+X <- filtered_data[, colnames(transposed_genes)]
+```
+
+# Convertir la variable de respuesta a factor
+```{r}
+y <- as.factor(y)
+```
+
+# Normalizar datos
+```{r}
+X <- scale(X)
+```
+
+# Dividir los datos en conjuntos de entrenamiento y prueba con validación cruzada
+```{r}
+set.seed(123)
+indices <- createDataPartition(y, p = 0.7, list = FALSE)
+train_indices <- indices
+X_train <- X[train_indices, ]
+y_train <- y[train_indices]
+X_test <- X[-train_indices, ]
+y_test <- y[-train_indices]
+```
+
+# Ajustar el modelo KNN con validación cruzada
+```{r}
+ctrl <- trainControl(method = "cv", number = 5)  # 5-fold cross-validation
+k_values <- c(1, 3, 5, 7, 9)
+tune_grid <- expand.grid(k = k_values)
+model <- train(X_train, y_train, method = "knn", tuneGrid = tune_grid, trControl = ctrl)
+```
+
+# Realizar predicciones en el conjunto de prueba
+```{r}
+predictions <- predict(model, newdata = X_test)
+```
+
+# Evaluar el rendimiento del modelo
+```{r}
+confusionMatrix(predictions, y_test)
+```
+
+# Curva ROC y AUC
+```{r}
+predictions <- as.numeric(predictions)
+prediction_obj <- prediction(predictions, y_test)
+perf <- performance(prediction_obj, "tpr", "fpr")
+plot(perf, main = "ROC Curve", col = "blue", lwd = 2)
+```
+
+## Resultados y comparacion entre el modelo KNN y KNN_PIK3R1
+
+Este modelo KNN muestra un rendimiento con una precision del 97.53% y una sensibilidad alta del 98.79%. Teniendo en cuenta lo anterior podemos indicar que el modelo es capaz de identificar primary tumor. Kappa es de 0.848 indica un acuerdo entre las predicciones y las clases reales. 
+
+En el caso del modelo KNN_PIK3R1 tenemos un rendimiento del 99.18% y una sensibilidad del 99.70% sugiere que es capaz de identificar primary tumor. Kappa es del 0.9493 lo que sugiere un acuerdo efectivo entre las predicciones y las clases reales. 
+
+Para este caso se tiene que el modelo de PIK3R1 es mas eficientes como se vio en el modelo anterio. El modelo con genes PIK3R1 tiende a aumentar el rendimiento ligeramente mejor en términos de precisión y sensibilidad en comparación con el otro modelo de arbol de decisiones. 
+
+## Modelo de regresion logistica 
+
+## Cargar los datos (BRCA_normal Y BRCA_PT) y unirlos en un solo dataset
+```{r}
+merged_data <- rbind(DynamicCancerDriverKM::BRCA_normal, DynamicCancerDriverKM::BRCA_PT)
+```
+
+# Eliminar las columnas no relevantes para el análisis
+```{r}
+columnas_no_relevantes <- c("barcode", "bcr_patient_barcode", "bcr_sample_barcode", "vital_status", "days_to_death", "treatments_radiation_treatment_or_therapy")
+merged_data <- merged_data[, !(names(merged_data) %in% columnas_no_relevantes)]
+```
+
+# Verificar si hay datos nulos en el dataset
+```{r}
+any(is.na(merged_data))
+```
+
+# Calcular el porcentaje de expresión para cada gen
+```{r}
+expression_percentage <- colMeans(merged_data > 0)
+umbral <- 0.2
+filtered_data <- merged_data %>%
+  select(names(expression_percentage[expression_percentage >= umbral]))
+```
+
+# Calcular grados de conexión de los genes en la red PPI
+```{r}
+top_genes <- DynamicCancerDriverKM::PPI %>%
+  select(`Input-node Gene Symbol`, `Input-node GeneID`, `Output-node Gene Symbol`, `Edge direction score`) %>%
+  group_by(`Input-node Gene Symbol`) %>%
+  summarize(Degree = sum(`Edge direction score`, na.rm = TRUE)) %>%
+  arrange(desc(Degree))
+```
+
+# Seleccionar los 100 genes con los grados de conexión más altos
+```{r}
+top_100_genes <- top_genes %>%
+  top_n(100, wt = Degree)
+
+top_genes <- cbind(AMCBGeneUtils::changeGeneId(top_100_genes[, 1], from = "HGNC.symbol")[2:4], top_100_genes[, -1])
+```
+
+# Eliminar las columnas no relevantes
+```{r}
+columnas_relevantes <- c("HGNC.ID", "HGNC.symbol")
+top_genes <- top_genes[, !(names(top_genes) %in% columnas_relevantes)]
+```
+
+# Transponer top_genes para que los nombres de los genes estén en columnas
+```{r}
+transposed_genes <- t(top_genes[, -1])
+colnames(transposed_genes) <- top_genes$Ensembl.ID
+```
+
+# Obtener la variable de respuesta 'y'
+```{r}
+y <- filtered_data$sample_type
+```
+
+# Filtrar las columnas del dataframe para mantener solo los genes seleccionados
+```{r}
+X <- filtered_data[, transposed_genes]
+```
+
+# Convertir la variable de respuesta a factor
+```{r}
+y <- as.factor(y)
+```
+
+# Dividir los datos en conjuntos de entrenamiento y prueba
+```{r}
+set.seed(123)
+train_indices <- createDataPartition(y, p = 0.7, list = FALSE)
+X_train <- X[train_indices, ]
+y_train <- y[train_indices]
+X_test <- X[-train_indices, ]
+y_test <- y[-train_indices]
+```
+
+# Ajustar un modelo de regresión logística con regularización L1 (lasso)
+```{r}
+model <- cv.glmnet(as.matrix(X_train), y_train, family = "binomial", alpha = 1)
+```
+
+# Realizar predicciones en el conjunto de prueba
+```{r}
+predictions <- predict(model, newx = as.matrix(X_test), s = "lambda.min", type = "response")
+```
+
+# Convertir las probabilidades a clases
+```{r}
+predictions <- as.factor(ifelse(predictions > 0.5, levels(y)[2], levels(y)[1]))
+```
+
+# Evaluar el rendimiento del modelo
+```{r}
+confusionMatrix(predictions, y_test)
+
+precision <- posPredValue(predictions, y_test)
+roc_curve <- roc(y_test, as.numeric(predictions == "Tumor"), levels = c("Primary Tumor", "Solid Tissue Normal"))
+roc_auc <- auc(roc_curve)
+cat("Precision:", precision, "\n")
+cat("AUC:", roc_auc)
+```
+
+## Modelo de regresion logistica PIK3R1
+
+# Cargar los datos (BRCA_normal Y BRCA_PT) y unirlos en un solo dataset
+```{r}
+merged_data <- rbind(DynamicCancerDriverKM::BRCA_normal, DynamicCancerDriverKM::BRCA_PT)
+load("C:\\Users\\Santi\\Downloads\\geneScore.rdata")
+```
+
+# Eliminar las columnas no relevantes para el análisis
+```{r}
+columnas_no_relevantes <- c("barcode", "bcr_patient_barcode", "bcr_sample_barcode", "vital_status", "days_to_death", "treatments_radiation_treatment_or_therapy")
+merged_data <- merged_data[, !(names(merged_data) %in% columnas_no_relevantes)]
+```
+
+# Verificar si hay datos nulos en el dataset
+```{r}
+any(is.na(merged_data))
+```
+
+# Calcular el porcentaje de expresión para cada gen
+```{r}
+expression_percentage <- colMeans(merged_data > 0)
+umbral <- 0.2
+filtered_data <- merged_data %>%
+  select(names(expression_percentage[expression_percentage >= umbral]))
+```
+
+# Ordenar el data frame por el campo 'score' de manera descendente
+```{r}
+df_sorted <-  prub %>% arrange(desc(score))
+```
+
+# Seleccionar los primeros 100 genes con mayor score
+```{r}
+top_genes <- df_sorted[1:100, ]
+```
+
+# Transponer top_genes para que los nombres de los genes estén en columnas
+```{r}
+transposed_genes <- as.data.frame(t(top_genes))
+```
+
+# Asignar los nombres de las columnas usando la primera fila (antes de la transposición)
+```{r}
+colnames(transposed_genes) <-  transposed_genes[1, ]
+```
+
+# Eliminar la primera fila, ya que ahora es la cabecera de las columnas
+```{r}
+transposed_genes <- transposed_genes[-1, ]
+```
+
+# Obtener la variable de respuesta 'y'
+```{r}
+y <- filtered_data$sample_type
+```
+
+# Filtrar las columnas del dataframe para mantener solo los genes seleccionados
+```{r}
+X <- filtered_data[, colnames(transposed_genes)]
+```
+
+# Convertir la variable de respuesta a factor
+```{r}
+y <- as.factor(y)
+```
+
+# Dividir los datos en conjuntos de entrenamiento y prueba
+```{r}
+set.seed(123)
+train_indices <- createDataPartition(y, p = 0.7, list = FALSE)
+X_train <- X[train_indices, ]
+y_train <- y[train_indices]
+X_test <- X[-train_indices, ]
+y_test <- y[-train_indices]
+```
+
+# Ajustar un modelo de regresión logística con regularización L1 (lasso)
+```{r}
+model <- cv.glmnet(as.matrix(X_train), y_train, family = "binomial", alpha = 1)
+```
+
+# Realizar predicciones en el conjunto de prueba
+```{r}
+predictions <- predict(model, newx = as.matrix(X_test), s = "lambda.min", type = "response")
+```
+
+# Convertir las probabilidades a clases
+```{r}
+predictions <- as.factor(ifelse(predictions > 0.5, levels(y)[2], levels(y)[1]))
+```
+
+# Evaluar el rendimiento del modelo
+```{r}
+confusionMatrix(predictions, y_test)
+
+precision <- posPredValue(predictions, y_test)
+roc_curve <- roc(y_test, as.numeric(predictions == "Tumor"), levels = c("Primary Tumor", "Solid Tissue Normal"))
+roc_auc <- auc(roc_curve)
+cat("Precision:", precision,  "AUC:", roc_auc)
+```
+
+## Resultado y comparacion del modelo de regresion lineal
+
+Como lo hemos visto con los modelo anteriores el rendimiento, la sensibilidad y precision son los adecuados para distinguir y predecir primary tumor con un 97.64% de efectividad.
+
+Por otra parte el modelo con genes PIK3R1 aumenta su valor en rendimiento, sensibilidad y precision lo que nos demuestra que este modelos es un poco mas efectivo que el otro modelo
+
+
+# Modelo SVM (Maquinas de soporte vectorial)
+
+# Cargar los datos (BRCA_normal Y BRCA_PT) y unirlos en un solo dataset
+```{r}
+merged_data <- rbind(DynamicCancerDriverKM::BRCA_normal, DynamicCancerDriverKM::BRCA_PT)
+```
+
+# Eliminar las columnas no relevantes para el análisis
+```{r}
+columnas_no_relevantes <- c("barcode", "bcr_patient_barcode", "bcr_sample_barcode", "vital_status", "days_to_death", "treatments_radiation_treatment_or_therapy")
+merged_data <- merged_data[, !(names(merged_data) %in% columnas_no_relevantes)]
+```
+
+# Verificar si hay datos nulos en el dataset
+```{r}
+any(is.na(merged_data))
+```
+
+# VERIFICAR EL UMBRAL DE EXPRESION DE LAS MUESTRAS PARA CADA GEN 
+
+# Obtener la matriz de muestras (sin la columna 'sample_type')
+```{r}
+matriz_muestras <- as.matrix(merged_data[, -1])
+```
+
+# Calcular el umbral como el valor máximo en la matriz de muestras
+```{r}
+umbral <- 0.0001 * max(matriz_muestras)
+```
+
+# Vector lógico que indica si cada muestra está activa para cada gen
+```{r}
+muestras_activas <- matriz_muestras > umbral
+```
+
+# Contar la cantidad de TRUE para cada gen
+```{r}
+verdaderos_por_gen <- colSums(muestras_activas)
+```
+
+# FILTRAR LOS GENES QUE SE EXPRESAN EN MAS DEL 20% DE LA MUESTRAS
+
+# Calcular el umbral para conservar la columna con (20% del total de la muestra)
+```{r}
+umbral_eliminar_columna <- nrow(matriz_muestras) * 0.2
+```
+
+# Encontrar las columnas a conservar (que tienen menos del 20% de TRUE)
+```{r}
+columnas_a_conservar <- which(verdaderos_por_gen >= umbral_eliminar_columna)
+```
+
+# Filtrar el DataFrame original para conservar solo las columnas necesarias
+```{r}
+filtered_data <- merged_data[, c(1, columnas_a_conservar + 1)] 
+```
+
+# CAMBIAR EL NOMBRE DE LAS COLUMNAS "Ensembl.ID" A "HGNC.symbol"
+
+# Listar los nombres de los genes de "Ensembl.ID"
+```{r}
+gen_names <- colnames(filtered_data)[-1]
+```
+
+# Burcar los nombres de los genes "Ensembl.ID"  con "HGNC.symbol"
+```{r}
+genes_names <- AMCBGeneUtils::changeGeneId(gen_names, from = "Ensembl.ID")
+```
+
+# Cambiar los nombre el el DataFrame merged_filtrado de "Ensembl.ID" a "HGNC.symbol"
+```{r}
+colnames(filtered_data)[-1] <- genes_names$HGNC.symbol                 
+```
+
+# FILTRAR LOS GENES QUE ESTAN PRESENTES EN "filtered_data" y "la red PPI"
+
+# Obtener los nombres de genes en PPI
+```{r}
+genes_ppi <- DynamicCancerDriverKM::PPI$`Input-node Gene Symbol`
+```
+
+# Obtener los nombres de genes en filtered_data
+```{r}
+genes_merged <- colnames(filtered_data)[-1]  # Excluir la columna "sample_type"
+```
+
+# Encontrar los genes comunes
+```{r}
+genes_comunes <- intersect(genes_ppi, genes_merged)
+```
+
+# Filtrar el DataFrame PPI para incluir solo las filas con genes comunes
+```{r}
+genes_comunes <- PPI[genes_ppi %in% genes_comunes, ]
+```
+
+# FRECUENCIA DE LOS GENES
+
+# Contar la frecuencia de genes en 'Input-node Gene Symbol'
+```{r}
+input_gene_counts <- genes_comunes %>%
+  group_by(`Input-node Gene Symbol`) %>%
+  summarize(input_count = n())
+```
+
+# Contar la frecuencia de genes en 'Output-node Gene Symbol'
+```{r}
+output_gene_counts <- genes_comunes %>%
+  group_by(`Output-node Gene Symbol`) %>%
+  summarize(output_count = n())
+```
+
+# Unir las dos tablas por los nombres de los genes
+```{r}
+merged_counts <- full_join(input_gene_counts, output_gene_counts, 
+                           by = c("Input-node Gene Symbol" = "Output-node Gene Symbol"))
+```
+
+# Rellenar NA con 0
+```{r}
+merged_counts[is.na(merged_counts)] <- 0
+```
+
+# Sumar las columnas 'input_count' y 'output_count' para obtener el total
+```{r}
+merged_counts$total_count <- rowSums(merged_counts[, c("input_count", "output_count")])
+```
+
+# Ordenar por 'total_count' de mayor a menor
+```{r}
+merged_counts <- merged_counts %>%
+  arrange(desc(total_count))
+```
+
+# Filtrar los primeros 100 genes
+```{r}
+top_genes <- head(merged_counts, 100)
+```
+
+# Obtener los nombres de los 100 genes de top_genes
+```{r}
+top_100_genes <- top_genes$`Input-node Gene Symbol`
+```
+
+# Obtener la variable de respuesta 'y'
+```{r}
+y <- filtered_data$sample_type
+```
+
+# Filtrar las columnas de tu dataframe 'data' para mantener solo los genes seleccionados
+```{r}
+X <- filtered_data[, top_100_genes]
+```
+
+# Convertir la variable de respuesta a factor
+```{r}
+y <- as.factor(y)
+```
+
+# Dividir los datos en conjuntos de entrenamiento y prueba
+```{r}
+set.seed(123)
+train_indices <- createDataPartition(y, p = 0.7, list = FALSE)
+X_train <- X[train_indices, ]
+y_train <- y[train_indices]
+X_test <- X[-train_indices, ]
+y_test <- y[-train_indices]
+```
+
+# Ajustar el modelo SVM
+```{r}
+model <- svm(y_train ~ ., data = cbind(X_train, y_train), kernel = "linear")
+```
+
+# Realizar predicciones en el conjunto de prueba
+```{r}
+predictions <- predict(model, newdata = cbind(X_test, y_test))
+```
+
+# Evaluar el rendimiento del modelo
+```{r}
+confusionMatrix(predictions, y_test)
+precision <- posPredValue(predictions, y_test)
+roc_curve <- roc(y_test, as.numeric(predictions == "Tumor"), levels = c("Primary Tumor", "Solid Tissue Normal"))
+roc_auc <- auc(roc_curve)
+cat("Precision:", precision,  "AUC:", roc_auc)
+```
+
+
+# Modelo SVM (Maquina de soporte vectorial) PIK3R1
+
+# Cargar datos
+```{r}
+merged_data <- rbind(DynamicCancerDriverKM::BRCA_normal, DynamicCancerDriverKM::BRCA_PT)
+
+load("C:\\Users\\Santi\\Downloads\\geneScore.rdata")
+```
+
+# Eliminar las columnas no relevantes
+```{r}
+columnas_no_relevantes <- c("barcode", "bcr_patient_barcode", "bcr_sample_barcode", "vital_status", "days_to_death", "treatments_radiation_treatment_or_therapy")
+merged_data <- merged_data[, !(names(merged_data) %in% columnas_no_relevantes)]
+```
+
+# Verificar si hay datos nulos en el dataset
+```{r}
+any(is.na(merged_data))
+```
+
+# Calcular el porcentaje de expresión para cada gen
+```{r}
+expression_percentage <- colMeans(merged_data > 0)
+umbral <- 0.2
+filtered_data <- merged_data %>%
+  select(names(expression_percentage[expression_percentage >= umbral]))
+```
+
+# Ordenar el data frame por el campo 'score' de manera descendente
+```{r}
+df_sorted <-  prub %>% arrange(desc(score))
+```
+
+# Seleccionar los primeros 100 genes con mayor score
+```{r}
+top_genes <- df_sorted[1:100, ]
+```
+
+# Transponer top_genes para que los nombres de los genes estén en columnas
+```{r}
+transposed_genes <- as.data.frame(t(top_genes))
+```
+
+# Asignar los nombres de las columnas usando la primera fila (antes de la transposición)
+```{r}
+colnames(transposed_genes) <-  transposed_genes[1, ]
+```
+
+# Eliminar la primera fila, ya que ahora es la 
+```{r}
+transposed_genes <- transposed_genes[-1, ]
+```
+
+# Obtener la variable de respuesta 'y'
+```{r}
+y <- filtered_data$sample_type
+```
+
+# Filtrar las columnas de tu dataframe 'data' para mantener solo los genes seleccionados
+```{r}
+X <- filtered_data[, colnames(transposed_genes)]
+```
+
+# Convertir la variable de respuesta a factor
+```{r}
+y <- as.factor(y)
+```
+
+# Dividir los datos en conjuntos de entrenamiento y prueba
+set.seed(123)
+```{r}
+train_indices <- createDataPartition(y, p = 0.7, list = FALSE)
+X_train <- X[train_indices, ]
+y_train <- y[train_indices]
+X_test <- X[-train_indices, ]
+y_test <- y[-train_indices]
+```
+
+# Ajustar el modelo SVM
+```{r}
+model <- svm(y_train ~ ., data = cbind(X_train, y_train), kernel = "linear")
+```
+
+# Realizar predicciones en el conjunto de prueba
+```{r}
+predictions <- predict(model, newdata = cbind(X_test, y_test))
+```
+
+# Evaluar el rendimiento del modelo
+```{r}
+confusionMatrix(predictions, y_test)
+
+precision <- posPredValue(predictions, y_test)
+roc_curve <- roc(y_test, as.numeric(predictions == "Tumor"), levels = c("Primary Tumor", "Solid Tissue Normal"))
+roc_auc <- auc(roc_curve)
+cat("Precision:", precision,  "AUC:", roc_auc)
+```
+
+
+## Resultado y comparacion entre los modelos SVM y SVM_PIK3R1
+
+El modelo muestra un rendimiento sólido con una precisión general del 98.9%. La sensibilidad es muy alta (99.09%), lo que indica que el modelo es capaz de identificar la gran mayoría de las instancias de Primary Tumor. La especificidad es aceptable (93.94%), lo que sugiere que el modelo también es capaz de identificar instancias de Solid Tissue Normal de manera efectiva. La Kappa de 0.9334 indica un acuerdo sustancial entre las predicciones y las clases reales. Estos resultados son indicativos de un modelo que funciona bien en la clasificación
+
+
+Por ultimo temenos SVM_PIK3R1 que tienen unos valores mas altos respectivamente para cada carateristicas, esto sugiere que este modelo es mas efectivo que el otro.
+
+
+## Conclusiones
+
+-El aprendizaje supervisado ha demostrado ser una herramienta esencial en la resolución de problemas complejos, como la clasificación de muestras de cáncer de mama, al permitir la creación de modelos predictivos basados en ejemplos previamente etiquetados.
+
+-La metodología implementada en el proyecto destaca la versatilidad del aprendizaje supervisado al aplicarse a conjuntos de datos biológicos complejos, como el análisis de expresión génica en cáncer de mama. Esto demuestra la capacidad del enfoque para abordar problemas específicos en el ámbito de la biología molecular.
+
+-La selección de genes a través de una red de interacción de proteínas presentó desafíos específicos debido a las diferencias en la nomenclatura y distribución de variables. 
+
+-El análisis de datos de cáncer de mama y la predicción de tipos de muestras tienen aplicaciones potenciales en la práctica clínica. Los modelos resultantes podrían contribuir a la identificación temprana de tumores primarios.
+
+-La elección de algoritmos, como el árbol de decisiones, y la cuidadosa evaluación del modelo utilizando métricas como la curva ROC y el AUC, resaltan la importancia de seleccionar métodos adecuados y evaluar la eficacia del modelo de manera rigurosa.
+
+
+## Referencias 
+
+-RPubs - Machine Learning con R y caret. (s/f). Rpubs.com. Recuperado el 22 de noviembre de 2023, de https://rpubs.com/Joaquin_AR/383283
+
+-WilliamDAssafMSFT. (s/f). Tutorial: Entrenamiento y comparación de modelos predictivos en R - SQL machine learning. Microsoft.com. Recuperado el 22 de noviembre de 2023, de https://learn.microsoft.com/es-es/sql/machine-learning/tutorials/r-predictive-model-train?view=sql-server-ver16
+
+-Zhou, Z.-H. (2021). Machine learning. Springer Nature.
+(S/f). Ieee.org. Recuperado el 22 de noviembre de 2023, de https://ieeexplore.ieee.org/abstract/document/8697857
+
+-Presentación del profesor 
